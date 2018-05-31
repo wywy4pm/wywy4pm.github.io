@@ -55,8 +55,6 @@
 			
 				<li><a href="/">主页</a></li>
 	        
-				<li><a href="/tags/随笔/">随笔</a></li>
-	        
 			</ul>
 		</nav>
 		<nav class="header-smart-menu">
@@ -77,13 +75,11 @@
 		<nav class="header-nav">
 			<div class="social">
 				
-					<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
+					<a class="github" target="_blank" href="https://github.com/wywy4pm" title="github"><i class="icon-github"></i></a>
 		        
-					<a class="weibo" target="_blank" href="#" title="weibo"><i class="icon-weibo"></i></a>
+					<a class="qq" target="_blank" href="/954085955" title="qq"><i class="icon-qq"></i></a>
 		        
-					<a class="rss" target="_blank" href="#" title="rss"><i class="icon-rss"></i></a>
-		        
-					<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+					<a class="mail" target="_blank" href="/wywywy996@gmail.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
 		</nav>
@@ -111,20 +107,16 @@
 			
 				
 			
-				
-			
 			
 			
 			<nav class="header-nav">
 				<div class="social">
 					
-						<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
+						<a class="github" target="_blank" href="https://github.com/wywy4pm" title="github"><i class="icon-github"></i></a>
 			        
-						<a class="weibo" target="_blank" href="#" title="weibo"><i class="icon-weibo"></i></a>
+						<a class="qq" target="_blank" href="/954085955" title="qq"><i class="icon-qq"></i></a>
 			        
-						<a class="rss" target="_blank" href="#" title="rss"><i class="icon-rss"></i></a>
-			        
-						<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+						<a class="mail" target="_blank" href="/wywywy996@gmail.com" title="mail"><i class="icon-mail"></i></a>
 			        
 				</div>
 			</nav>
@@ -133,9 +125,7 @@
 				<ul style="width: 50%">
 				
 				
-					<li style="width: 50%"><a href="/">主页</a></li>
-		        
-					<li style="width: 50%"><a href="/tags/随笔/">随笔</a></li>
+					<li style="width: 100%"><a href="/">主页</a></li>
 		        
 				</ul>
 			</nav>
@@ -174,62 +164,11 @@
       
         <h3 id="双纵向嵌套滑动冲突"><a href="#双纵向嵌套滑动冲突" class="headerlink" title="双纵向嵌套滑动冲突"></a>双纵向嵌套滑动冲突</h3><p>日常开发中经常遇到滑动冲突的问题，今天给大家介绍一种纵向嵌套的滑动冲突解决方法。这里主要讲下纵向嵌套的情况，横纵向嵌套类似，只是判断条件不一样而已。这里介绍父ScrollView嵌套子Scrollview。下面介绍两种解决方法:</p>
 <h4 id="1-通过ViewGroup去处理"><a href="#1-通过ViewGroup去处理" class="headerlink" title="1.通过ViewGroup去处理"></a>1.通过ViewGroup去处理</h4><p>默认情况下，当我们滑动整个页面的时候，父ScrollView消费掉滑动事件，子ScrollView则无法滚动，所以这里可以通过修改父ScrollView的onInterceptTouchEvent方法来根据具体情况来选择是否拦截，当不拦截的时候，就不会执行自己的滑动事件，这时我们的子ScrollView就可以执行自己的滑动事件。这里我根据具体滑动区域去判断。下面看下具体代码：</p>
-<h5 id="父ScrollView"><a href="#父ScrollView" class="headerlink" title="父ScrollView"></a>父ScrollView</h5><pre><code>public class GroupScrollView extends ScrollView {
-    public GroupScrollView(Context context) {
-        super(context);
-    }
-
-    public GroupScrollView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public GroupScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        float x = ev.getX();
-        float y = ev.getY();
-        switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if (x &gt;= 0 &amp;&amp; x &lt;= 1080
-                        &amp;&amp; y &gt; 0 &amp;&amp; y &lt;= 600) {
-                    return false;
-                }
-                break;
-            case MotionEvent.ACTION_UP:
-                break;
-        }
-        return super.onInterceptTouchEvent(ev);
-    }
-}
-</code></pre><h5 id="布局文件"><a href="#布局文件" class="headerlink" title="布局文件"></a>布局文件</h5><pre><code>&lt;com.arun.test.GroupScrollView              xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
-    android:layout_width=&quot;match_parent&quot;
-    android:layout_height=&quot;500dp&quot;&gt;
-
-    &lt;RelativeLayout
-        android:layout_width=&quot;match_parent&quot;
-        android:layout_height=&quot;600dp&quot;
-        android:background=&quot;@android:color/holo_red_dark&quot;&gt;
-
-        &lt;ScrollView
-            android:layout_width=&quot;match_parent&quot;
-            android:layout_height=&quot;200dp&quot;
-            android:background=&quot;@android:color/holo_green_dark&quot;&gt;
-
-            &lt;RelativeLayout
-                android:layout_width=&quot;match_parent&quot;
-                android:layout_height=&quot;300dp&quot;
-                android:orientation=&quot;horizontal&quot; /&gt;
-        &lt;/ScrollView&gt;
-    &lt;/RelativeLayout&gt;
-&lt;/com.arun.test.GroupScrollView&gt;
-</code></pre><h4 id="2-通过子View去处理"><a href="#2-通过子View去处理" class="headerlink" title="2.通过子View去处理"></a>2.通过子View去处理</h4><p>虽然滑动事件存在冲突，但子ScrollView的onTouchEvent还是可以执行，可以在子ScrollView的onTouchEvent中去主动通知父ScrollView让它不拦截自己的事件，通过requestDisallowInterceptTouchEvent(true)来请求。这样父ScrollView就不会<br>拦截子ScrollView的滑动事件。</p>
+<h5 id="父ScrollView"><a href="#父ScrollView" class="headerlink" title="父ScrollView"></a>父ScrollView</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">public class GroupScrollView extends ScrollView &#123;</span><br><span class="line">    public GroupScrollView(Context context) &#123;</span><br><span class="line">        super(context);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public GroupScrollView(Context context, AttributeSet attrs) &#123;</span><br><span class="line">        super(context, attrs);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public GroupScrollView(Context context, AttributeSet attrs, int defStyleAttr) &#123;</span><br><span class="line">        super(context, attrs, defStyleAttr);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public boolean onInterceptTouchEvent(MotionEvent ev) &#123;</span><br><span class="line">        float x = ev.getX();</span><br><span class="line">        float y = ev.getY();</span><br><span class="line">        switch (ev.getAction()) &#123;</span><br><span class="line">            case MotionEvent.ACTION_DOWN:</span><br><span class="line">                break;</span><br><span class="line">            case MotionEvent.ACTION_MOVE:</span><br><span class="line">                if (x &gt;= 0 &amp;&amp; x &lt;= 1080</span><br><span class="line">                        &amp;&amp; y &gt; 0 &amp;&amp; y &lt;= 600) &#123;</span><br><span class="line">                    return false;</span><br><span class="line">                &#125;</span><br><span class="line">                break;</span><br><span class="line">            case MotionEvent.ACTION_UP:</span><br><span class="line">                break;</span><br><span class="line">        &#125;</span><br><span class="line">        return super.onInterceptTouchEvent(ev);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="布局文件"><a href="#布局文件" class="headerlink" title="布局文件"></a>布局文件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;com.arun.test.GroupScrollView xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">    android:layout_width=&quot;match_parent&quot;</span><br><span class="line">    android:layout_height=&quot;500dp&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;RelativeLayout</span><br><span class="line">        android:layout_width=&quot;match_parent&quot;</span><br><span class="line">        android:layout_height=&quot;600dp&quot;</span><br><span class="line">        android:background=&quot;@android:color/holo_red_dark&quot;&gt;</span><br><span class="line"></span><br><span class="line">        &lt;ScrollView</span><br><span class="line">            android:layout_width=&quot;match_parent&quot;</span><br><span class="line">            android:layout_height=&quot;200dp&quot;</span><br><span class="line">            android:background=&quot;@android:color/holo_green_dark&quot;&gt;</span><br><span class="line"></span><br><span class="line">            &lt;RelativeLayout</span><br><span class="line">                android:layout_width=&quot;match_parent&quot;</span><br><span class="line">                android:layout_height=&quot;300dp&quot;</span><br><span class="line">                android:orientation=&quot;horizontal&quot; /&gt;</span><br><span class="line">        &lt;/ScrollView&gt;</span><br><span class="line">    &lt;/RelativeLayout&gt;</span><br><span class="line">&lt;/com.arun.test.GroupScrollView&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="2-通过子View去处理"><a href="#2-通过子View去处理" class="headerlink" title="2.通过子View去处理"></a>2.通过子View去处理</h4><p>虽然滑动事件存在冲突，但子ScrollView的onTouchEvent还是可以执行，可以在子ScrollView的onTouchEvent中去主动通知父ScrollView让它不拦截自己的事件，通过requestDisallowInterceptTouchEvent(true)来请求。这样父ScrollView就不会<br>拦截子ScrollView的滑动事件。</p>
 <h5 id="子ScrollView"><a href="#子ScrollView" class="headerlink" title="子ScrollView"></a>子ScrollView</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public class ChildScrollView extends ScrollView &#123;</span><br><span class="line">    public ChildScrollView(Context context) &#123;</span><br><span class="line">        super(context);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public ChildScrollView(Context context, AttributeSet attrs) &#123;</span><br><span class="line">        super(context, attrs);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public ChildScrollView(Context context, AttributeSet attrs, int defStyleAttr) &#123;</span><br><span class="line">        super(context, attrs, defStyleAttr);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public boolean onTouchEvent(MotionEvent ev) &#123;</span><br><span class="line">        requestDisallowInterceptTouchEvent(true);</span><br><span class="line">        return super.onTouchEvent(ev);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="布局文件-1"><a href="#布局文件-1" class="headerlink" title="布局文件"></a>布局文件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;ScrollView xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">    android:layout_width=&quot;match_parent&quot;</span><br><span class="line">    android:layout_height=&quot;500dp&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;RelativeLayout</span><br><span class="line">        android:layout_width=&quot;match_parent&quot;</span><br><span class="line">        android:layout_height=&quot;600dp&quot;</span><br><span class="line">        android:background=&quot;@android:color/holo_red_dark&quot;&gt;</span><br><span class="line"></span><br><span class="line">        &lt;com.nibiru.opengltest.ChildScrollView</span><br><span class="line">            android:layout_width=&quot;match_parent&quot;</span><br><span class="line">            android:layout_height=&quot;200dp&quot;</span><br><span class="line">            android:background=&quot;@android:color/holo_green_dark&quot;&gt;</span><br><span class="line"></span><br><span class="line">            &lt;RelativeLayout</span><br><span class="line">                android:layout_width=&quot;match_parent&quot;</span><br><span class="line">                android:layout_height=&quot;300dp&quot;</span><br><span class="line">                android:orientation=&quot;horizontal&quot; /&gt;</span><br><span class="line">        &lt;/com.nibiru.opengltest.ChildScrollView&gt;</span><br><span class="line">    &lt;/RelativeLayout&gt;</span><br><span class="line">&lt;/ScrollView&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="布局文件-1"><a href="#布局文件-1" class="headerlink" title="布局文件"></a>布局文件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;ScrollView xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">    android:layout_width=&quot;match_parent&quot;</span><br><span class="line">    android:layout_height=&quot;500dp&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;RelativeLayout</span><br><span class="line">        android:layout_width=&quot;match_parent&quot;</span><br><span class="line">        android:layout_height=&quot;600dp&quot;</span><br><span class="line">        android:background=&quot;@android:color/holo_red_dark&quot;&gt;</span><br><span class="line"></span><br><span class="line">        &lt;com.arun.test.ChildScrollView</span><br><span class="line">            android:layout_width=&quot;match_parent&quot;</span><br><span class="line">            android:layout_height=&quot;200dp&quot;</span><br><span class="line">            android:background=&quot;@android:color/holo_green_dark&quot;&gt;</span><br><span class="line"></span><br><span class="line">            &lt;RelativeLayout</span><br><span class="line">                android:layout_width=&quot;match_parent&quot;</span><br><span class="line">                android:layout_height=&quot;300dp&quot;</span><br><span class="line">                android:orientation=&quot;horizontal&quot; /&gt;</span><br><span class="line">        &lt;/com.arun.test.ChildScrollView&gt;</span><br><span class="line">    &lt;/RelativeLayout&gt;</span><br><span class="line">&lt;/ScrollView&gt;</span><br></pre></td></tr></table></figure>
 <h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>滑动冲突的两种解决办法：1.处理外部ViewGroup的拦截方法；2.在子View的onTouchEvent里通知父ViewGroup不去拦截自己的滑动事件。个人理解的还不是太透彻，比较简单点。</p>
 
       
@@ -410,34 +349,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
 
     
     	<section class="tools-section tools-section-friends" q-show="friends">
-  		
-        <ul class="search-ul">
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接1</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接2</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接3</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接4</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接5</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接6</a>
-            </li>
-          
-        </ul>
   		
     	</section>
     
